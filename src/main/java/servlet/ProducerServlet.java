@@ -21,14 +21,17 @@ public class ProducerServlet extends HttpServlet {
         long price = Long.parseLong(req.getParameter("price"));
 
         //создать авто и добавить в базу
-        Car newCar = new Car(brand, model, licensePlate, price);
-/*        if (CarService.getInstance().addNewCar(newCar)){ // метод добавить  авто на склад
+     //   Car newCar = new Car(brand, model, licensePlate, price);
+        // fFАне создавать обект!!!!!!!!! создать в методе после проверки наличия в базе!!!!!!!!!!
 
-        resp.setStatus(HttpServletResponse.SC_OK);}
-        else {
+
+        //..................... передать 4 поля!!!!!!!!!!!!!!!
+        /* метод добавить  авто на склад - проверка на 10-ку*/
+        if (CarService.getInstance().addNewCar(brand, model, licensePlate, price)) {
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } else {
             resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
         }
 
-    */
     }
 }

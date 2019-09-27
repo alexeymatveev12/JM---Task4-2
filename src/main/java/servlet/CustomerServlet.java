@@ -29,7 +29,7 @@ public class CustomerServlet extends HttpServlet {
         String brand = req.getParameter("brand");
         String model = req.getParameter("model");
         String licensePlate = req.getParameter("licensePlate");
- //       CarService.getInstance().sellCar(); // метод купить авто
+        CarService.getInstance().sellCar(brand, model, licensePlate); // сделать метод купить авто
         resp.setStatus(HttpServletResponse.SC_OK);
     }
 }

@@ -23,7 +23,7 @@ public class Car {
     @Column(name = "price")
     private Long price;
 
-    public Car() {
+    public Car(String brand, String model, String licensePlate) {
 
     }
 

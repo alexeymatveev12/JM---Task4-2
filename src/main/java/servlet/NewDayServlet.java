@@ -14,7 +14,7 @@ public class NewDayServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //  super.doGet(req, resp);
-//        DailyReportService.getInstance().creatNewDailyReport(); //создать новый отчёт на день
+        DailyReportService.getInstance().createNewDailyReport(); //создать новый отчёт на день
 
         resp.setStatus(HttpServletResponse.SC_OK);
     }

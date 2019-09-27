@@ -1,6 +1,7 @@
 package service;
 
 import DAO.DailyReportDao;
+import model.Car;
 import model.DailyReport;
 import org.hibernate.SessionFactory;
 import util.DBHelper;
@@ -40,8 +41,17 @@ public class DailyReportService {
 
 
     //закрыть старый отчёт - создать новый
- /*   public void creatNewDailyReport() {
-        new DailyReportDao(sessionFactory.openSession()).addTodayDailyReportDAO();
+    public void createNewDailyReport() {
+       DailyReport dailyReport = new DailyReport();
+     //создать отчёт с нулевыми кол-во авто и стоимостьпродажи
+        new DailyReportDao(sessionFactory.openSession()).addTodayDailyReportDAO(dailyReport);
     }
-*/
+
+    public void updateLastDailyReport(Car car) {
+        //создать отчёт с нулевыми кол-во авто и стоимостьпродажи
+           new DailyReportDao(sessionFactory.openSession()).updateTodayDailyReportDAO(car);
+    }
+
+
+
 }

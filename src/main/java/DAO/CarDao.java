@@ -2,9 +2,12 @@ package DAO;
 
 import model.Car;
 
+import model.DailyReport;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -55,5 +58,62 @@ public class CarDao {
         transaction.commit();
         session.close();
 
+
     }
+
+    public boolean checkBrandQuantityDAO(String brand) {
+
+        Criteria criteria = session.createCriteria(Car.class);
+
+        int car = session.createQuery("FROM car").list().size();
+     //   int carQuantity = car.size();
+        //
+
+        criteria.add(Restrictions.eq("brand", brand))
+                .list()
+
+                .size();// что сделать?
+        int brandQuantity = 0; // (int) criteria;
+        session.close();
+        if (brandQuantity <= 10) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Car checkCarInStockDAO(String brand, String model, String licensePlate) {
+
+        Criteria criteria = session.createCriteria(Car.class);
+        criteria.add(Restrictions.eq("brand", brand));
+        criteria.add(Restrictions.eq("model", model));
+        criteria.add(Restrictions.eq("licensePlate", licensePlate)).uniqueResult();
+        Car carInStock = (Car) criteria;
+
+        session.close();
+        return carInStock;
+
+//добавить авто в отчёт!!!!!!!!!!!!!!!!!!!!!!!!!!! ЦЕНА + кол-во!!!
+
+        // удалить авто из базы
+        //найти авто в базе?????????????????????????
+        //       new CarDao(sessionFactory.openSession(soldCar)).
+        //               deleteSoldCarDAO(car);
+
+/*
+        Session session = HibernateUtil.getHibernateSession();
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Item> cr = cb.createQuery(Item.class);
+        Root<Item> root = cr.from(Item.class);
+        cr.select(root);
+
+        Query<Item> query = session.createQuery(cr);
+        List<Item> results = query.getResultList();
+
+        4.3.10.Final
+        5.4.5.Final
+ */
+    }
+
+
 }
