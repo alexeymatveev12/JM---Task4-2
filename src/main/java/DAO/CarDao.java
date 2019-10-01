@@ -32,7 +32,7 @@ public class CarDao {
 
     public List<Car> getAllCarsDAO() {
         Transaction transaction = session.beginTransaction();
-        List<Car> allCars = session.createQuery("FROM Car").list();
+        List<Car> allCars = (List<Car>) session.createQuery("FROM Car").list();
         transaction.commit();
         session.close();
         return allCars;
@@ -53,45 +53,38 @@ public class CarDao {
 
     public void deleteAllCarsDAO() {
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("DELETE FROM Car");
-        query.executeUpdate();
+        session.createQuery("DELETE FROM Car").executeUpdate();
         transaction.commit();
         session.close();
 
 
     }
 
-    public boolean checkBrandQuantityDAO(String brand) {
+    public int checkBrandQuantityDAO(String brand) {
 
         Criteria criteria = session.createCriteria(Car.class);
 
-        int car = session.createQuery("FROM car").list().size();
-     //   int carQuantity = car.size();
-        //
+         //   int car = session.createQuery("FROM car").list().size();
+        //   int carQuantity = car.size();
 
-        criteria.add(Restrictions.eq("brand", brand))
-                .list()
+        int brandQuantity = criteria.add(Restrictions.eq("brand", brand)).list().size();// что сделать?
 
-                .size();// что сделать?
-        int brandQuantity = 0; // (int) criteria;
         session.close();
-        if (brandQuantity <= 10) {
-            return true;
-        } else {
-            return false;
-        }
+        return brandQuantity;
     }
 
     public Car checkCarInStockDAO(String brand, String model, String licensePlate) {
 
-        Criteria criteria = session.createCriteria(Car.class);
-        criteria.add(Restrictions.eq("brand", brand));
-        criteria.add(Restrictions.eq("model", model));
-        criteria.add(Restrictions.eq("licensePlate", licensePlate)).uniqueResult();
-        Car carInStock = (Car) criteria;
+        Car carInStock   = (Car) session.createCriteria(Car.class)
+        .add(Restrictions.eq("brand", brand))
+        .add(Restrictions.eq("model", model))
+        .add(Restrictions.eq("licensePlate", licensePlate)).uniqueResult();
+
 
         session.close();
         return carInStock;
+
+
 
 //добавить авто в отчёт!!!!!!!!!!!!!!!!!!!!!!!!!!! ЦЕНА + кол-во!!!
 

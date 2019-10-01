@@ -43,35 +43,40 @@ public class CarService {
         return new CarDao(sessionFactory.openSession()).checkCarInStockDAO(brand, model, licensePlate);
     }
 
+    // Проверка - количество в базе авто одного бренда
+    public int checkBrandQuantity(String brand) {
+        return new CarDao(sessionFactory.openSession()).checkBrandQuantityDAO(brand);
+    }
+
+
     public boolean addNewCar(String brand, String model, String licensePlate, long price) {
 
         Car newCar = new Car(brand, model, licensePlate, price);
 //    если уже есть авто на складе
 // добавить проверку меньше 10 бренд
-        if (checkCarInStock(brand, model, licensePlate) != newCar) {// а так ли сравнение??????
-            if (new CarDao(sessionFactory.openSession()).checkBrandQuantityDAO(brand)) {
-                new CarDao(sessionFactory.openSession()).addNewCarDAO(newCar);
-                return true;
-            } else {
-                return false;
-            }
+        //      new CarDao(sessionFactory.openSession()).addNewCarDAO(newCar);
+        //      if (checkCarInStock(brand, model, licensePlate) != newCar) {// а так ли сравнение??????
+        if (CarService.getInstance().checkBrandQuantity(brand) < 10) {
+            new CarDao(sessionFactory.openSession()).addNewCarDAO(newCar);
+            return true;
+        } else {
+            return false;
         }
-        return false;
+
     }
 
 
     public void sellCar(String brand, String model, String licensePlate) {
 
-        Car soldCar = new Car(brand, model, licensePlate);
-//найти авто в базе?????????????????????????
+        //найти авто в базе
+        Car soldCar = CarService.getInstance().checkCarInStock(brand, model, licensePlate);
         // удалить авто из базы
-        //добавить авто в отчёт!!!!!!!!!!!!!!!!!!!!!!!!!!! ЦЕНА + кол-во!!!
-        if (checkCarInStock(brand, model, licensePlate) == soldCar) {// а так ли сравнение??????
+        new CarDao(sessionFactory.openSession()).deleteSoldCarDAO(soldCar);
+//добавить авто в отчёт!!!!!!!!!!!!!!!!!!!!!!!!!!! ЦЕНА + кол-во!!!
 
-            new CarDao(sessionFactory.openSession()).deleteSoldCarDAO(soldCar);
-            new DailyReportDao(sessionFactory.openSession()).updateTodayDailyReportDAO(soldCar);
-        } else {
-        }
+        //  DailyReportService.getInstance().updateLastDailyReport(soldCar);
+        DailyReportService.getInstance().updateCounterAfterSale(soldCar.getPrice());
+
     }
 
 }
